@@ -1,0 +1,311 @@
+/* =========================================
+   LAYOUT DEL POS
+   ========================================= */
+.pos-container {
+    display: grid;
+    grid-template-columns: 1fr 400px; /* Izquierda flexible, Derecha fija */
+    gap: 1.5rem;
+    /* Ajuste de altura: 100vh - Header(64px) - Padding(4rem) */
+    height: calc(100vh - 64px - 4rem);
+    overflow: hidden;
+}
+
+/* =========================================
+   SECCIÓN IZQUIERDA (CATÁLOGO)
+   ========================================= */
+.catalog-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* --- BUSCADOR MODERNO (CORREGIDO) --- */
+.search-box {
+    display: flex;
+    align-items: center;
+    background: white;
+    padding: 0 15px;
+    height: 56px; /* Altura cómoda */
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    transition: all 0.2s ease;
+}
+
+/* Efecto de foco en el contenedor */
+.search-box:focus-within {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+/* 1. BUSCADOR (Más separación abajo) */
+.search-box {
+    display: flex;
+    align-items: center;
+    background: white;
+    padding: 0 15px;
+    height: 56px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    transition: all 0.2s ease;
+
+    /* NUEVO: Separación con la lista de productos */
+    margin-bottom: 1.5rem;
+}
+
+/* El input invisible */
+.search-input {
+    border: none !important;
+    outline: none !important;
+    background: transparent;
+    width: 100%;
+    height: 100%;
+    font-size: 1rem;
+    color: #1e293b;
+    margin-left: 12px;
+}
+
+.search-input::placeholder {
+    color: #cbd5e1;
+}
+
+/* 2. LISTA DE PRODUCTOS (Espacio para que la animación respire) */
+.product-list {
+    flex: 1;
+    overflow-y: auto;
+
+    /* NUEVO: Padding en todos los lados. 
+       Esto evita que la sombra o el movimiento se corten por el scrollbar */
+    padding: 10px;
+
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
+    align-content: start;
+}
+
+.product-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1rem;
+    border: 1px solid #e2e8f0;
+    transition: all 0.15s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 130px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+    position: relative;
+    overflow: hidden;
+}
+
+.product-card:hover {
+    border-color: #3b82f6;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.15);
+}
+
+/* Efecto de click */
+.product-card:active {
+    transform: scale(0.98);
+}
+
+.prod-name {
+    font-weight: 600;
+    color: #334155;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    margin-bottom: 0.8rem;
+}
+
+.prod-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: auto;
+}
+
+.prod-stock {
+    font-size: 0.75rem;
+    color: #64748b;
+    background: #f1f5f9;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-weight: 600;
+}
+
+.prod-price {
+    font-weight: 800;
+    color: #3b82f6;
+    font-size: 1.15rem;
+}
+
+/* =========================================
+   SECCIÓN DERECHA (TICKET)
+   ========================================= */
+.ticket-section {
+    background: white;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+    height: 100%;
+    overflow: hidden;
+}
+
+.ticket-header {
+    padding: 1.5rem;
+    background-color: #ffffff;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+/* --- SELECTOR DE CLIENTE (CORREGIDO) --- */
+.custom-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 10px 15px;
+    padding-right: 40px; /* Espacio para flecha */
+    font-size: 0.95rem;
+    color: #334155;
+    width: 100%;
+    cursor: pointer;
+    outline: none;
+    font-family: inherit;
+
+    /* Flecha SVG codificada */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+    transition: all 0.2s;
+}
+
+.custom-select:focus {
+    background-color: white;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.ticket-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0;
+}
+
+/* Items del Carrito */
+.cart-item {
+    display: grid;
+    grid-template-columns: 1fr auto auto auto;
+    gap: 12px;
+    align-items: center;
+    padding: 14px 1.5rem;
+    border-bottom: 1px dashed #e2e8f0;
+    transition: background 0.1s;
+}
+
+.cart-item:hover {
+    background-color: #f8fafc;
+}
+
+.item-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #1e293b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.qty-control {
+    width: 55px;
+    text-align: center;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 4px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #1e293b;
+    outline: none;
+}
+
+.qty-control:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.item-total {
+    font-weight: 700;
+    color: #334155;
+    min-width: 75px;
+    text-align: right;
+}
+
+/* Footer de Pago */
+.ticket-footer {
+    padding: 1.5rem;
+    background-color: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.2rem;
+}
+
+.total-label {
+    font-size: 0.9rem;
+    color: #64748b;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.total-amount {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #3b82f6;
+    letter-spacing: -1px;
+}
+
+.btn-pay {
+    width: 100%;
+    padding: 16px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-radius: 10px;
+    background-color: #3b82f6;
+    border: none;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-pay:hover:not(:disabled) {
+    background-color: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(59, 130, 246, 0.4);
+}
+
+.btn-pay:disabled {
+    background-color: #cbd5e1;
+    cursor: not-allowed;
+    box-shadow: none;
+    opacity: 0.7;
+}

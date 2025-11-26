@@ -1,0 +1,59 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro semitransparente */
+    backdrop-filter: blur(4px); /* Efecto borroso moderno */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000; /* Encima de todo */
+}
+
+.modal-card {
+    background: white;
+    width: 90%;
+    max-width: 400px; /* Ancho típico de ticket */
+    border-radius: 12px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    max-height: 90vh;
+}
+
+.modal-header {
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-body {
+    padding: 1.5rem;
+    overflow-y: auto;
+    background-color: #f8fafc;
+}
+
+/* Estilo de Ticket de Supermercado */
+.ticket-content {
+    font-family: 'Consolas', 'Courier New', monospace; /* Fuente monoespaciada vital para alineación */
+    font-size: 0.85rem;
+    background-color: white;
+    padding: 1rem;
+    border: 1px dashed #cbd5e1;
+    white-space: pre-wrap; /* Mantiene saltos de línea */
+    color: #334155;
+    margin: 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.modal-footer {
+    padding: 1rem;
+    background-color: white;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    gap: 10px;
+}

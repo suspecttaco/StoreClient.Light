@@ -1,0 +1,112 @@
+@page "/"
+
+<div class="page">
+    
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <span class="logo-icon">🛍️</span>
+            <span class="logo-text">Tiendita POS</span>
+        </div>
+
+        <div class="sidebar-menu">
+            
+            <div class="nav-section-label ps-3 mt-3">General</div>
+
+            <div class="nav-btn @GetActiveClass(typeof(DashboardView))" 
+                 @onclick="() => ShowComponent(typeof(DashboardView))">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Dashboard</span>
+            </div>
+
+            <div class="nav-btn @GetActiveClass(typeof(PosView))" 
+                 @onclick="() => ShowComponent(typeof(PosView))">
+                <i class="bi bi-cart-check-fill"></i>
+                <span>Punto de Venta</span>
+            </div>
+
+            <div class="nav-dropdown-btn" @onclick='() => ToggleMenu("ops")'>
+                <span>Operaciones</span>
+                <i class="bi @GetArrowIcon(expandOperations)"></i>
+            </div>
+
+            @if (expandOperations)
+            {
+                <div class="nav-submenu">
+                    <div class="nav-btn @GetActiveClass(typeof(SalesHistoryView))" 
+                         @onclick="() => ShowComponent(typeof(SalesHistoryView))">
+                        <i class="bi bi-clock-history"></i>
+                        <span>Historial Ventas</span>
+                    </div>
+                </div>
+            }
+
+            <div class="nav-dropdown-btn" @onclick='() => ToggleMenu("admin")'>
+                <span>Administración</span>
+                <i class="bi @GetArrowIcon(expandAdmin)"></i>
+            </div>
+
+            @if (expandAdmin)
+            {
+                <div class="nav-submenu">
+                    <div class="nav-btn @GetActiveClass(typeof(InventoryView))" 
+                         @onclick="() => ShowComponent(typeof(InventoryView))">
+                        <i class="bi bi-box-seam-fill"></i>
+                        <span>Inventario</span>
+                    </div>
+
+                    <div class="nav-btn @GetActiveClass(typeof(CategoryView))" 
+                         @onclick="() => ShowComponent(typeof(CategoryView))">
+                        <i class="bi bi-tags-fill"></i>
+                        <span>Categorías</span>
+                    </div>
+
+                    <div class="nav-btn @GetActiveClass(typeof(CustomerView))" 
+                         @onclick="() => ShowComponent(typeof(CustomerView))">
+                        <i class="bi bi-people-fill"></i>
+                        <span>Clientes</span>
+                    </div>
+                    
+                    <div class="nav-btn @GetActiveClass(typeof(SupplierView))" 
+                         @onclick="() => ShowComponent(typeof(SupplierView))">
+                        <i class="bi bi-truck"></i>
+                        <span>Proveedores</span>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="nav-btn text-danger" @onclick="Logout">
+                <i class="bi bi-box-arrow-left"></i>
+                <span>Cerrar Sesión</span>
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <div class="top-bar">
+            <div>
+                <h5 class="m-0 fw-bold text-secondary">@currentTitle</h5>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <NotificationBell />
+                
+                <div class="text-end d-none d-sm-block">
+                    <div class="fw-bold small">@userName</div>
+                    <div class="text-muted" style="font-size: 0.75rem; text-transform: capitalize;">@userRole</div>
+                </div>
+        
+                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold" 
+                     style="width: 35px; height: 35px;">
+                    @userInitial
+                </div>
+            </div>
+        </div>
+
+        <article class="content-area">
+            <DynamicComponent Type="activeComponent" />
+        </article>
+    </main>
+</div>
+
+<GlobalToast />

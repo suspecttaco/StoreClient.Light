@@ -1,0 +1,52 @@
+@page "/login"
+
+<div class="login-container">
+    <div class="login-card">
+        
+        <div class="text-center">
+            <div class="brand-icon">🛍️</div>
+            <h2 class="brand-title">Shopeer</h2>
+            <p class="brand-subtitle">Acceso Administrativo</p>
+        </div>
+
+        <EditForm Model="@model" OnValidSubmit="HandleLogin">
+            <DataAnnotationsValidator />
+
+            <div class="form-floating mb-3">
+                <InputText id="txtUser" class="form-control" @bind-Value="model.Username" placeholder="Usuario" />
+                <label for="txtUser">Usuario</label>
+                <ValidationMessage For="@(() => model.Username)" class="text-danger small mt-1 fw-bold" />
+            </div>
+
+            <div class="form-floating mb-4">
+                <InputText type="password" id="txtPass" class="form-control" @bind-Value="model.Password" placeholder="Contraseña" />
+                <label for="txtPass">Contraseña</label>
+                <ValidationMessage For="@(() => model.Password)" class="text-danger small mt-1 fw-bold" />
+            </div>
+
+            <button type="submit" class="btn w-100 btn-login text-uppercase" disabled="@isLoading">
+                @if (isLoading)
+                {
+                    <span class="spinner-border spinner-border-sm me-2"></span>
+                    <span>Validando...</span>
+                }
+                else
+                {
+                    <span>Iniciar Sesión</span>
+                }
+            </button>
+
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <div class="alert alert-danger mt-4 border-0 bg-danger-subtle text-danger d-flex align-items-center rounded-3">
+                    <span class="me-2">⚠️</span>
+                    <div class="small fw-bold">@errorMessage</div>
+                </div>
+            }
+        </EditForm>
+        
+        <div class="text-center mt-4">
+            <small class="text-muted opacity-50">v1.0 internal-test</small>
+        </div>
+    </div>
+</div>

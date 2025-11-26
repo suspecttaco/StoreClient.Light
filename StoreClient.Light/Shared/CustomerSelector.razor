@@ -1,0 +1,65 @@
+@using StoreClient.Light.Models
+
+<div class="selector-container">
+    <div class="selector-header @(isOpen ? "active" : "")" @onclick="ToggleOpen">
+        <span class="selected-text">
+            @GetSelectedName()
+        </span>
+        <i class="bi bi-chevron-down arrow-icon @(isOpen ? "rotate" : "")"></i>
+    </div>
+
+    @if (isOpen)
+    {
+        <div class="selector-overlay" @onclick="Close"></div>
+
+        <div class="selector-dropdown animate__animated animate__fadeIn">
+            @foreach (var customer in Customers)
+            {
+                <div class="selector-item @(SelectedId == customer.Id ? "selected" : "")" 
+                     @onclick="() => SelectItem(customer)">
+                    
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="fw-bold">@customer.Name</span>
+                        @if (customer.Id > 0)
+                        {
+                            <span class="badge bg-light text-secondary border" style="font-weight: 400;">ID: @customer.Id</span>
+                        }
+                    </div>
+                    
+                    @if(customer.CurrentBalance > 0) 
+                    { 
+                        <small class="text-danger" style="font-size: 0.75rem;">
+                            Debe: $@customer.CurrentBalance
+                        </small> 
+                    }
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    // Parámetros obligatorios para que funcione el @bind
+    [Parameter] public List<Customer> Customers { get; set; } = new();
+    [Parameter] public int SelectedId { get; set; }
+    [Parameter] public EventCallback<int> SelectedIdChanged { get; set; }
+
+    private bool isOpen = false;
+
+    private void ToggleOpen() => isOpen = !isOpen;
+    private void Close() => isOpen = false;
+
+    private async Task SelectItem(Customer customer)
+    {
+        SelectedId = customer.Id;
+        // Avisamos al padre (POSView) que el valor cambió
+        await SelectedIdChanged.InvokeAsync(SelectedId);
+        isOpen = false;
+    }
+
+    private string GetSelectedName()
+    {
+        var selected = Customers.FirstOrDefault(c => c.Id == SelectedId);
+        return selected?.Name ?? "Seleccionar cliente...";
+    }
+}

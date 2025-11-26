@@ -1,0 +1,103 @@
+.selector-container {
+    position: relative;
+    width: 100%;
+    font-family: 'Segoe UI', sans-serif;
+    user-select: none;
+}
+
+/* CAJA PRINCIPAL */
+.selector-header {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 10px 15px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s ease;
+    min-height: 42px;
+}
+
+.selector-header:hover {
+    background-color: white;
+    border-color: #cbd5e1;
+}
+
+.selector-header.active {
+    background-color: white;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.selected-text {
+    font-size: 0.95rem;
+    color: #334155;
+    font-weight: 500;
+}
+
+/* FLECHA ANIMADA */
+.arrow-icon {
+    color: #94a3b8;
+    transition: transform 0.2s ease;
+    font-size: 0.8rem;
+}
+
+.arrow-icon.rotate {
+    transform: rotate(180deg);
+}
+
+/* DROPDOWN FLOTANTE */
+.selector-dropdown {
+    position: absolute;
+    top: 115%; /* Un poquito separado de la caja */
+    left: 0;
+    right: 0;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    border: 1px solid #f1f5f9;
+    z-index: 1000; /* Encima de todo */
+    max-height: 250px;
+    overflow-y: auto;
+    padding: 6px;
+}
+
+/* Scrollbar fino dentro del dropdown */
+.selector-dropdown::-webkit-scrollbar {
+    width: 5px;
+}
+.selector-dropdown::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 10px;
+}
+
+/* ITEMS */
+.selector-item {
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #1e293b;
+    border-bottom: 1px solid transparent;
+}
+
+.selector-item:hover {
+    background-color: #f1f5f9;
+    color: #3b82f6;
+}
+
+.selector-item.selected {
+    background-color: #eff6ff; /* Azul muy claro */
+    color: #2563eb;
+}
+
+/* BACKDROP INVISIBLE (Cierra al dar click afuera) */
+.selector-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 999;
+    cursor: default;
+}

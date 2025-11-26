@@ -1,0 +1,61 @@
+@using StoreClient.Light.Models
+
+<div class="selector-container">
+    <div class="selector-header @(isOpen ? "active" : "")" @onclick="ToggleOpen">
+        <span class="selected-text @(SelectedId == null ? "text-muted" : "")">
+            @GetSelectedText()
+        </span>
+        <i class="bi bi-chevron-down arrow-icon @(isOpen ? "rotate" : "")"></i>
+    </div>
+
+    @if (isOpen)
+    {
+        <div class="selector-overlay" @onclick="Close"></div>
+
+        <div class="selector-dropdown animate__animated animate__fadeIn">
+            <div class="selector-item text-muted fst-italic" @onclick="() => SelectItem(null)">
+                -- Seleccionar --
+            </div>
+
+            @foreach (var item in Options)
+            {
+                <div class="selector-item @(SelectedId == item.Id ? "selected" : "")" 
+                     @onclick="() => SelectItem(item.Id)">
+                    
+                    <div class="fw-bold">@item.Text</div>
+                    
+                    @if (!string.IsNullOrEmpty(item.Subtitle))
+                    {
+                        <small class="text-muted" style="font-size: 0.75rem;">@item.Subtitle</small>
+                    }
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public List<SelectorOption> Options { get; set; } = new();
+    [Parameter] public int? SelectedId { get; set; }
+    [Parameter] public EventCallback<int?> SelectedIdChanged { get; set; }
+    [Parameter] public string Placeholder { get; set; } = "Seleccionar...";
+
+    private bool isOpen = false;
+
+    private void ToggleOpen() => isOpen = !isOpen;
+    private void Close() => isOpen = false;
+
+    private async Task SelectItem(int? id)
+    {
+        SelectedId = id;
+        await SelectedIdChanged.InvokeAsync(SelectedId);
+        isOpen = false;
+    }
+
+    private string GetSelectedText()
+    {
+        if (SelectedId == null || SelectedId == 0) return Placeholder;
+        var selected = Options.FirstOrDefault(x => x.Id == SelectedId);
+        return selected?.Text ?? Placeholder;
+    }
+}

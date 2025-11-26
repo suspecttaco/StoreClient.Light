@@ -1,0 +1,70 @@
+@if (IsVisible)
+{
+    <div class="modal-overlay" @onclick="Close">
+        <div class="modal-card" @onclick:stopPropagation="true">
+            
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-truck me-2 text-primary"></i>@title
+                </h5>
+                <button type="button" class="btn-close" @onclick="Close"></button>
+            </div>
+
+            <EditForm Model="@model" OnValidSubmit="HandleSave">
+                <div class="modal-body">
+                    <DataAnnotationsValidator />
+
+                    <div class="form-floating mb-3">
+                        <InputText id="supName" class="form-control" @bind-Value="model.Name" placeholder="Empresa" />
+                        <label for="supName">Nombre Empresa *</label>
+                        <ValidationMessage For="@(() => model.Name)" class="text-danger small mt-1" />
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <InputText id="supContact" class="form-control" @bind-Value="model.ContactName" placeholder="Contacto" />
+                        <label for="supContact">Nombre de Contacto</label>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <InputText id="supPhone" class="form-control" @bind-Value="model.Phone" placeholder="Tel" />
+                                <label for="supPhone">Teléfono</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <InputText id="supEmail" class="form-control" @bind-Value="model.Email" placeholder="Email" />
+                                <label for="supEmail">Correo Electrónico</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <InputTextArea id="supAddress" class="form-control" @bind-Value="model.Address" placeholder="Dir" style="height: 80px" />
+                        <label for="supAddress">Dirección</label>
+                    </div>
+
+                    <div class="form-check form-switch ps-0 d-flex align-items-center gap-2 border rounded p-2 bg-white">
+                        <InputCheckbox id="chkActive" class="form-check-input ms-2" @bind-Value="model.Active" />
+                        <label class="form-check-label fw-bold @(model.Active ? "text-success" : "text-secondary")" for="chkActive">
+                            @(model.Active ? "Proveedor Activo" : "Proveedor Inactivo")
+                        </label>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(errorMessage))
+                    {
+                        <div class="alert alert-danger mt-3 mb-0 py-2 small">@errorMessage</div>
+                    }
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light text-muted border" @onclick="Close">Cancelar</button>
+                    <button type="submit" class="btn btn-primary px-4 fw-bold" disabled="@isLoading">
+                        @if (isLoading) { <span>Guardando...</span> } else { <span>Guardar</span> }
+                    </button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+}

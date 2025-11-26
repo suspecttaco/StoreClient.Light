@@ -1,0 +1,122 @@
+/* Contenedor principal con padding */
+.dashboard-container {
+    padding-bottom: 2rem;
+}
+
+/* GRID DE TARJETAS */
+/* Se adapta automáticamente: 4 columnas en monitores grandes, 2 en tablets, 1 en móvil */
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* TARJETA KPI */
+.kpi-card {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0,0,0,0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 200px; /* Altura fija para uniformidad */
+    position: relative;
+    overflow: hidden;
+}
+
+.kpi-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* Decoración de fondo (Círculo sutil) */
+.kpi-card::after {
+    content: '';
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    width: 100px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.05;
+    padding: 1.25rem; /* Un poco menos de padding para que no se vea tan gigante */
+    height: auto;     /* Altura automática para adaptarse al contenido */
+    min-height: 200px;
+}
+
+/* Títulos más legibles */
+.kpi-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.25rem;
+}
+
+/* Valor numérico más fuerte */
+.kpi-value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #1e293b;
+    line-height: 1.1;
+}
+
+/* Círculo del icono PERFECTO */
+.kpi-icon {
+    font-size: 1.5rem;
+    width: 48px;  /* Un poco más grande */
+    height: 48px; /* Cuadrado perfecto */
+    border-radius: 12px; /* Bordes suaves */
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centrado absoluto */
+    margin-bottom: 1rem;
+}
+
+/* VARIANTES DE COLOR (Semánticas) */
+.card-sales { border-left: 4px solid #10b981; color: #10b981; }
+.card-sales .kpi-icon { background-color: rgba(16, 185, 129, 0.1); }
+
+.card-tickets { border-left: 4px solid #3b82f6; color: #3b82f6; }
+.card-tickets .kpi-icon { background-color: rgba(59, 130, 246, 0.1); }
+
+.card-stock { border-left: 4px solid #ef4444; color: #ef4444; }
+.card-stock .kpi-icon { background-color: rgba(239, 68, 68, 0.1); }
+
+.card-products { border-left: 4px solid #f59e0b; color: #f59e0b; }
+.card-products .kpi-icon { background-color: rgba(245, 158, 11, 0.1); }
+
+/* Estado de Alerta (Stock Bajo) */
+.alert-mode {
+    background-color: #fef2f2;
+    border-color: #ef4444;
+}
+
+/* Contenedor de la gráfica */
+.chart-placeholder-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+    padding: 2rem;
+    min-height: 300px; /* Altura mínima */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Área punteada */
+.chart-empty-state {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8fafc;
+    border: 2px dashed #e2e8f0; /* Borde punteado elegante */
+    border-radius: 12px;
+    color: #94a3b8;
+}

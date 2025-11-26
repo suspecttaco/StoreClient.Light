@@ -1,0 +1,110 @@
+
+
+<div class="view-container animate__animated animate__fadeIn">
+    
+    <div class="d-flex justify-content-between align-items-end mb-2">
+        <div>
+            <h4 class="fw-bold text-dark m-0">Directorio de Clientes</h4>
+            <small class="text-muted">Administra tus clientes y créditos</small>
+        </div>
+    </div>
+
+    <div class="toolbar">
+        <div class="search-box">
+            <i class="bi bi-search text-muted"></i>
+            <input type="text" class="search-input" placeholder="Buscar por nombre..." 
+                   @bind="searchQuery" @oninput="HandleSearch" />
+        </div>
+
+        <div class="d-flex align-items-center gap-3">
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="chkInactive" 
+                       checked="@showInactive" @onchange="ToggleInactive">
+                <label class="form-check-label small text-muted" for="chkInactive">Mostrar Eliminados</label>
+            </div>
+
+            <button class="btn btn-primary d-flex align-items-center gap-2" @onclick="OpenCreateModal">
+                <i class="bi bi-person-plus-fill"></i>
+                <span>Nuevo Cliente</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="table-container">
+        @if (isLoading)
+        {
+            <div class="d-flex justify-content-center align-items-center h-100 p-5">
+                <div class="spinner-border text-primary" role="status"></div>
+            </div>
+        }
+        else if (filteredCustomers.Count == 0)
+        {
+            <div class="text-center p-5 text-muted">
+                <i class="bi bi-people fs-1 d-block mb-2 opacity-50"></i>
+                No se encontraron clientes.
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Teléfono</th>
+                            <th>Dirección</th>
+                            <th>Saldo Pendiente</th>
+                            <th class="text-end">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var c in filteredCustomers)
+                        {
+                            <tr style="@(!c.Active ? "opacity: 0.6; background: #f9fafb;" : "")">
+                                <td class="text-muted">#@c.Id</td>
+                                <td class="fw-bold">
+                                    @c.Name
+                                    @if (!c.Active) { <span class="badge bg-secondary ms-2">Inactivo</span> }
+                                </td>
+                                <td>@(string.IsNullOrEmpty(c.Phone) ? "-" : c.Phone)</td>
+                                <td class="text-truncate" style="max-width: 200px;" title="@c.Address">
+                                    @(string.IsNullOrEmpty(c.Address) ? "-" : c.Address)
+                                </td>
+                                
+                                <td>
+                                    @if (c.CurrentBalance > 0)
+                                    {
+                                        <span class="badge-balance">Debe: @c.CurrentBalance.ToString("C2")</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge-ok">Al corriente</span>
+                                    }
+                                </td>
+
+                                <td class="text-end">
+                                    <button class="btn-icon me-1" title="Editar" @onclick="() => OpenEditModal(c.Id)">
+                                        <i class="bi bi-pencil-fill"></i>
+                                    </button>
+                                    
+                                    @if (c.Active)
+                                    {
+                                        <button class="btn-icon delete" title="Eliminar" @onclick="() => HandleDelete(c)">
+                                            <i class="bi bi-trash3-fill"></i>
+                                        </button>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>
+
+<CustomerDetailModal 
+    @bind-IsVisible="showModal" 
+    CustomerId="selectedCustomerId" 
+    OnSaved="OnModalSaved" />

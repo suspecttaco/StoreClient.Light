@@ -1,0 +1,60 @@
+@if (IsVisible)
+{
+    <div class="modal-overlay animate__animated animate__fadeIn">
+        <div class="modal-card animate__animated animate__zoomIn">
+            
+            <div class="modal-header @(IsError ? "bg-danger text-white" : "bg-primary text-white")">
+                <h5 class="m-0 fw-bold">
+                    <i class="bi @(IsError ? "bi-exclamation-triangle-fill" : "bi-receipt") me-2"></i>
+                    @Title
+                </h5>
+                <button class="btn-close btn-close-white" @onclick="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                @if (IsError)
+                {
+                    <p class="text-danger fw-bold text-center my-4">@Content</p>
+                }
+                else
+                {
+                    <pre class="ticket-content">@Content</pre>
+                }
+            </div>
+
+            <div class="modal-footer">
+                @if (!IsError)
+                {
+                    <button class="btn btn-outline-secondary btn-sm" @onclick="Print">
+                        <i class="bi bi-printer me-1"></i> Imprimir
+                    </button>
+                }
+                <button class="btn btn-primary w-100" @onclick="Close">
+                    Aceptar y Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public bool IsVisible { get; set; }
+    [Parameter] public bool IsError { get; set; } = false;
+    [Parameter] public string Title { get; set; } = "Ticket";
+    [Parameter] public string Content { get; set; } = "";
+    
+    // Evento para avisarle al padre que se cerró (y limpiar el carrito)
+    [Parameter] public EventCallback OnClose { get; set; }
+
+    private async Task Close()
+    {
+        IsVisible = false;
+        await OnClose.InvokeAsync();
+    }
+
+    private void Print()
+    {
+        // Aquí podrías llamar a un servicio de impresión real
+        // Por ahora solo simula
+    }
+}

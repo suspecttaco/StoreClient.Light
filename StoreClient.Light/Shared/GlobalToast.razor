@@ -1,0 +1,80 @@
+@using StoreClient.Light.Services
+@inject ToastService ToastService
+@implements IDisposable
+
+<div class="toast-container">
+    @if (isVisible)
+    {
+        <div class="toast-message @GetClass()">
+            <div class="icon-box">
+                <i class="bi @GetIcon()"></i>
+            </div>
+            <div>
+                <div class="fw-bold">@GetTitle()</div>
+                <div class="small opacity-75">@message</div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private bool isVisible = false;
+    private string message = "";
+    private ToastLevel level = ToastLevel.Info;
+    
+    // Temporizador para ocultar
+    private System.Threading.Timer? timer;
+
+    protected override void OnInitialized()
+    {
+        // Suscribirse al evento del servicio
+        ToastService.OnShow += ShowToast;
+    }
+
+    private void ShowToast(string msg, ToastLevel lvl)
+    {
+        message = msg;
+        level = lvl;
+        isVisible = true;
+        StateHasChanged(); // Actualizar UI
+
+        // Reiniciar temporizador (3 segundos)
+        timer?.Dispose();
+        timer = new System.Threading.Timer(_ => 
+        {
+            isVisible = false;
+            InvokeAsync(StateHasChanged);
+        }, null, 3000, Timeout.Infinite);
+    }
+
+    private string GetClass() => level switch
+    {
+        ToastLevel.Success => "toast-success",
+        ToastLevel.Error => "toast-error",
+        ToastLevel.Warning => "toast-warning",
+        _ => "toast-info"
+    };
+
+    private string GetIcon() => level switch
+    {
+        ToastLevel.Success => "bi-check-lg",
+        ToastLevel.Error => "bi-x-octagon-fill",
+        ToastLevel.Warning => "bi-exclamation-triangle-fill",
+        _ => "bi-info-circle-fill"
+    };
+    
+    private string GetTitle() => level switch
+    {
+        ToastLevel.Success => "¡Éxito!",
+        ToastLevel.Error => "Error",
+        ToastLevel.Warning => "Atención",
+        _ => "Información"
+    };
+
+    public void Dispose()
+    {
+        // Desuscribirse para evitar fugas de memoria
+        ToastService.OnShow -= ShowToast;
+        timer?.Dispose();
+    }
+}

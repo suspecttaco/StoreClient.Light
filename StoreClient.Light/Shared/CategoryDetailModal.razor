@@ -1,0 +1,50 @@
+@if (IsVisible)
+{
+    <div class="modal-overlay" @onclick="Close">
+        <div class="modal-card" @onclick:stopPropagation="true" style="max-width: 450px;">
+            
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-tags-fill me-2 text-primary"></i>@title
+                </h5>
+                <button type="button" class="btn-close" @onclick="Close"></button>
+            </div>
+
+            <EditForm Model="@model" OnValidSubmit="HandleSave">
+                <div class="modal-body">
+                    <DataAnnotationsValidator />
+
+                    <div class="form-floating mb-3">
+                        <InputText id="catName" class="form-control" @bind-Value="model.Name" placeholder="Nombre" />
+                        <label for="catName">Nombre Categoría *</label>
+                        <ValidationMessage For="@(() => model.Name)" class="text-danger small mt-1" />
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <InputTextArea id="catDesc" class="form-control" @bind-Value="model.Description" placeholder="Descripción" style="height: 100px" />
+                        <label for="catDesc">Descripción (Opcional)</label>
+                    </div>
+
+                    <div class="form-check form-switch ps-0 d-flex align-items-center gap-2 border rounded p-2 bg-white">
+                        <InputCheckbox id="chkActive" class="form-check-input ms-2" @bind-Value="model.Active" />
+                        <label class="form-check-label fw-bold @(model.Active ? "text-success" : "text-secondary")" for="chkActive">
+                            @(model.Active ? "Categoría Activa" : "Categoría Inactiva")
+                        </label>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(errorMessage))
+                    {
+                        <div class="alert alert-danger mt-3 mb-0 py-2 small">@errorMessage</div>
+                    }
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light text-muted border" @onclick="Close">Cancelar</button>
+                    <button type="submit" class="btn btn-primary px-4 fw-bold" disabled="@isLoading">
+                        @if (isLoading) { <span>Guardando...</span> } else { <span>Guardar</span> }
+                    </button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+}
