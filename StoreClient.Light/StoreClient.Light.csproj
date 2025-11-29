@@ -6,13 +6,16 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RootNamespace>StoreClient.Light</RootNamespace>
+
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="ClosedXML" Version="0.105.0" />
       <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.0" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
       <PackageReference Include="Photino.Blazor" Version="4.0.13" />
+      <PackageReference Include="QuestPDF" Version="2025.7.4" />
       <PackageReference Include="RestSharp" Version="112.1.0" />
       <PackageReference Include="SocketIOClient" Version="3.1.2" />
       <PackageReference Include="SocketIOClient.Newtonsoft.Json" Version="3.0.7" />

@@ -5,18 +5,116 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tiendita POS</title>
     <base href="/" />
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&family=Montserrat:wght@600;700;900&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
     <link href="StoreClient.Light.styles.css" rel="stylesheet" />
+
     <style>
-        body { background-color: #f0f2f5; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .app-container { height: 100vh; display: flex; flex-direction: column; }
+        /* 1. FORZAR VARIABLES DE BOOTSTRAP */
+        :root {
+            --bs-font-sans-serif: 'Montserrat', sans-serif;
+            --bs-body-font-family: 'Montserrat', sans-serif;
+        }
+
+        /* 2. REGLA MAESTRA: APLICAR A TODO */
+        /* El asterisco * selecciona cada elemento existente */
+        * {
+            font-family: 'Montserrat', sans-serif !important;
+        }
+
+        /* 3. AJUSTES DE COMPORTAMIENTO (Ya los tenías) */
+        body {
+            background-color: #f0f2f5;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            cursor: default;
+        }
+
+        /* 4. EXCEPCIÓN PARA PODER ESCRIBIR */
+        /* Aplicamos también a los controles de fecha y selectores */
+        input, textarea, select {
+            -webkit-user-select: text !important;
+            user-select: text !important;
+            cursor: text !important;
+        }
     </style>
 </head>
 <body>
-<div id="app">Cargando sistema...</div>
+<div id="app">
+    <div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); display:flex; flex-direction:column; align-items:center;">
+        <div class="spinner-border text-primary" role="status"></div>
+        <div style="margin-top:10px; font-family:'Segoe UI', sans-serif; color:#666;">Cargando sistema...</div>
+    </div>
+</div>
 
 <script src="_framework/blazor.webview.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    window.renderSalesChart = (labels, data) => {
+        const ctx = document.getElementById('mySalesChart');
+        if (window.salesChartInstance) window.salesChartInstance.destroy();
+
+        window.salesChartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Ventas ($)',
+                    data: data,
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: true,
+                    pointBackgroundColor: '#ffffff',
+                    pointBorderColor: '#3b82f6',
+                    pointRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        padding: 10,
+                        cornerRadius: 8,
+                        titleFont: { family: 'Montserrat' },
+                        bodyFont: { family: 'Montserrat' }
+                    }
+                },
+                scales: {
+                    x: { 
+                        grid: { display: false },
+                        ticks: { font: { family: 'Montserrat' } }
+                    },
+                    y: { 
+                        beginAtZero: true,
+                        grid: { borderDash: [5, 5], color: '#e2e8f0' },
+                        ticks: { 
+                            callback: function(value) { return '$' + value; },
+                            font: { family: 'Montserrat' }
+                        }
+                    }
+                }
+            }
+        });
+    };
+</script>
 </body>
 </html>

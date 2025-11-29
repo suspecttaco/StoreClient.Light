@@ -13,9 +13,17 @@
             <input type="date" class="date-input" @bind="endDate" />
         </div>
 
-        <button class="btn btn-primary btn-sm px-3" @onclick="CargarVentas">
+        <button class="btn btn-primary btn-sm px-3" @onclick="LoadSales">
             <i class="bi bi-filter"></i> Filtrar
         </button>
+        
+        <button class="btn btn-dark btn-sm px-3 ms-2" @onclick="() => showExportModal = true">
+            <i class="bi bi-download me-1"></i> Exportar
+        </button>
+        
+        <ExportModal 
+            @bind-IsVisible="showExportModal"
+            OnExport="HandleExport" />
     </div>
 
     <div class="split-layout">
@@ -74,10 +82,10 @@
                 @if (selectedSale != null)
                 {
                     <div class="d-flex gap-2">
-                        <button class="action-btn btn-print" @onclick="VerTicket">
+                        <button class="action-btn btn-print" @onclick="SeeTicket">
                             <i class="bi bi-printer"></i> Imprimir
                         </button>
-                        <button class="action-btn btn-cancel" @onclick="CancelarVenta">
+                        <button class="action-btn btn-cancel" @onclick="CancelSale">
                             <i class="bi bi-x-circle"></i> Cancelar
                         </button>
                     </div>

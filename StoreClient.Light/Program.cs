@@ -1,5 +1,6 @@
 ﻿using Photino.Blazor;
 using Microsoft.Extensions.DependencyInjection;
+using QuestPDF.Infrastructure;
 using StoreClient.Light.Services;
 
 namespace StoreClient.Light;
@@ -8,6 +9,7 @@ class Program
     [STAThread]
     static void Main(string[] args)
     {
+        QuestPDF.Settings.License = LicenseType.Community;
         var appBuilder = PhotinoBlazorAppBuilder.CreateDefault(args);
         
         // Inyectar dependencias
@@ -18,6 +20,8 @@ class Program
         appBuilder.Services.AddSingleton<SocketService>();
         appBuilder.Services.AddSingleton<ToastService>();
         appBuilder.Services.AddSingleton<NotificationService>();
+        appBuilder.Services.AddSingleton<ConfirmService>();
+        appBuilder.Services.AddSingleton<ReportService>();
         
         // Registrar pagina maestra 
         appBuilder.RootComponents.Add<App>("#app");

@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using Microsoft.AspNetCore.Components;
 using StoreClient.Light.Models;
 using StoreClient.Light.Services;
@@ -9,6 +10,8 @@ public partial class SalesHistoryView
 {
     [Inject] public ApiService Api { get; set; }
     [Inject] public ToastService Toast { get; set; }
+    [Inject] public ConfirmService Confirm { get; set; }
+    [Inject] public ReportService Report { get; set; }
 
     // Datos
     private List<Sale> salesList = new();
@@ -23,13 +26,16 @@ public partial class SalesHistoryView
     private bool showTicketModal = false;
     private string ticketContent = "";
     private string ticketTitle = "";
+    
+    // Reportes
+    private bool showExportModal = false;
 
     protected override async Task OnInitializedAsync()
     {
-        await CargarVentas();
+        await LoadSales();
     }
 
-    private async Task CargarVentas()
+    private async Task LoadSales()
     {
         isLoading = true;
         selectedSale = null; // Limpiar selección al recargar
@@ -72,7 +78,7 @@ public partial class SalesHistoryView
 
     // --- ACCIONES ---
 
-    private void VerTicket()
+    private void SeeTicket()
     {
         if (selectedSale == null) return;
 
@@ -82,25 +88,34 @@ public partial class SalesHistoryView
         showTicketModal = true;
     }
 
-    private async Task CancelarVenta()
+    private async Task CancelSale()
     {
         if (selectedSale == null) return;
 
-        bool success = await Api.DeleteAsync($"sales/{selectedSale.Id}");
+        bool flag = await Confirm.Show(
+            "¿Cancelar Venta?",
+            $"Se reembolsara el total de ${selectedSale.Total:C2} y se restaurara el stock.",
+            "Cancelar Venta",
+            isDanger: true);
+
+        if (flag)
+        {
+            bool success = await Api.DeleteAsync($"sales/{selectedSale.Id}");
         
-        if (success)
-        {
-            int id = selectedSale.Id; // Guardar ID para el mensaje
-            selectedSale = null;      // Limpiar selección
+            if (success)
+            {
+                int id = selectedSale.Id; // Guardar ID para el mensaje
+                selectedSale = null;      // Limpiar selección
             
-            await CargarVentas();
+                await LoadSales();
             
-            // USAR EL SERVICIO GLOBAL
-            Toast.ShowSuccess($"Venta #{id} cancelada y stock restaurado.");
-        }
-        else
-        {
-            Toast.ShowError("Error al intentar cancelar la venta.");
+                // USAR EL SERVICIO GLOBAL
+                Toast.ShowSuccess($"Venta #{id} cancelada y stock restaurado.");
+            }
+            else
+            {
+                Toast.ShowError("Error al intentar cancelar la venta.");
+            }
         }
     }
     
@@ -108,5 +123,33 @@ public partial class SalesHistoryView
     private void OnTicketClosed()
     {
         showTicketModal = false;
+    }
+    
+    // Este método recibe la orden del modal
+    private async Task HandleExport((string Format, string Name) args)
+    {
+        if (salesList.Count == 0) 
+        {
+            Toast.ShowWarning("No hay datos para exportar.");
+            return;
+        }
+
+        Toast.ShowInfo($"Generando {args.Format.ToUpper()}...");
+
+        try
+        {
+            string path = "";
+            if (args.Format == "excel")
+                path = await Report.GenerateExcelAsync(salesList, args.Name);
+            else
+                path = await Report.GeneratePdfAsync(salesList, args.Name);
+
+            Toast.ShowSuccess($"Archivo guardado en Documentos.");
+        }
+        catch (Exception ex)
+        {
+            Toast.ShowError("Error al exportar.");
+            Console.WriteLine(ex);
+        }
     }
 }

@@ -5,7 +5,7 @@
     <div class="sidebar">
         <div class="sidebar-header">
             <span class="logo-icon">🛍️</span>
-            <span class="logo-text">Tiendita POS</span>
+            <span class="logo-text">Shopeer</span>
         </div>
 
         <div class="sidebar-menu">
@@ -57,7 +57,7 @@
                     <div class="nav-btn @GetActiveClass(typeof(CategoryView))" 
                          @onclick="() => ShowComponent(typeof(CategoryView))">
                         <i class="bi bi-tags-fill"></i>
-                        <span>Categorías</span>
+                        <span>Categorias</span>
                     </div>
 
                     <div class="nav-btn @GetActiveClass(typeof(CustomerView))" 
@@ -110,3 +110,4 @@
 </div>
 
 <GlobalToast />
+<GlobalConfirm />

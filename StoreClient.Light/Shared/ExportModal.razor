@@ -1,0 +1,68 @@
+@if (IsVisible)
+{
+    <div class="modal-overlay" @onclick="Close">
+        <div class="modal-card" @onclick:stopPropagation="true" style="max-width: 400px;">
+            
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-file-earmark-arrow-down-fill me-2 text-success"></i>
+                    Exportar Reporte
+                </h5>
+                <button type="button" class="btn-close" @onclick="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <p class="text-muted small mb-3">El archivo se guardará en tu carpeta <b>Documentos/Tiendita_Reportes</b>.</p>
+                
+                <div class="form-floating mb-4">
+                    <input type="text" class="form-control" id="fileName" @bind="fileName" placeholder="Nombre" />
+                    <label for="fileName">Nombre del Archivo</label>
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button class="btn btn-success py-2" @onclick='() => Export("excel")' disabled="@isLoading">
+                        @if(isLoading && format=="excel") { <span class="spinner-border spinner-border-sm"></span> }
+                        else { <span><i class="bi bi-file-excel me-2"></i> Exportar a Excel</span> }
+                    </button>
+                    
+                    <button class="btn btn-danger py-2" @onclick='() => Export("pdf")' disabled="@isLoading">
+                        @if(isLoading && format=="pdf") { <span class="spinner-border spinner-border-sm"></span> }
+                        else { <span><i class="bi bi-file-pdf me-2"></i> Exportar a PDF</span> }
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public bool IsVisible { get; set; }
+    [Parameter] public EventCallback<bool> IsVisibleChanged { get; set; }
+    
+    // Evento que devuelve (Formato, NombreArchivo)
+    [Parameter] public EventCallback<(string Format, string Name)> OnExport { get; set; }
+
+    private string fileName = $"Reporte_{DateTime.Now:yyyy-MM-dd}";
+    private bool isLoading = false;
+    private string format = "";
+
+    private async Task Export(string selectedFormat)
+    {
+        if (string.IsNullOrWhiteSpace(fileName)) return;
+
+        isLoading = true;
+        format = selectedFormat;
+        
+        // Avisamos al padre que exporte
+        await OnExport.InvokeAsync((selectedFormat, fileName));
+        
+        isLoading = false;
+        await Close();
+    }
+
+    private async Task Close()
+    {
+        IsVisible = false;
+        await IsVisibleChanged.InvokeAsync(false);
+    }
+}

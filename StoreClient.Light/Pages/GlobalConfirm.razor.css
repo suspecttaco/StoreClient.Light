@@ -1,0 +1,69 @@
+.confirm-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(15, 23, 42, 0.7); /* Fondo oscuro */
+    backdrop-filter: blur(4px);
+    z-index: 9999; /* Encima de todo, incluso Toasts */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.confirm-card {
+    background: white;
+    width: 90%;
+    max-width: 400px;
+    border-radius: 16px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    padding: 2rem;
+    text-align: center;
+    animation: zoomIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.icon-wrapper {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    margin: 0 auto 1.5rem auto;
+}
+
+/* Variantes de Icono */
+.icon-danger { background: #fef2f2; color: #ef4444; }
+.icon-info { background: #eff6ff; color: #3b82f6; }
+
+.confirm-title { font-size: 1.25rem; font-weight: 800; color: #1e293b; margin-bottom: 0.5rem; }
+.confirm-msg { color: #64748b; margin-bottom: 2rem; line-height: 1.5; }
+
+.btn-group { display: flex; gap: 10px; justify-content: center; }
+
+.btn {
+    flex: 1;
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+.btn:active { transform: scale(0.98); }
+
+.btn-cancel { background: #f1f5f9; color: #475569; }
+.btn-cancel:hover { background: #e2e8f0; }
+
+/* Botón de acción variable */
+.btn-danger-action { background: #ef4444; color: white; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3); }
+.btn-danger-action:hover { background: #dc2626; }
+
+.btn-primary-action { background: #3b82f6; color: white; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); }
+.btn-primary-action:hover { background: #2563eb; }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes zoomIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }

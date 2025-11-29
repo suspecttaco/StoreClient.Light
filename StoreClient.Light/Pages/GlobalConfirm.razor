@@ -1,0 +1,66 @@
+@using StoreClient.Light.Services
+@inject ConfirmService Service
+@implements IDisposable
+
+@if (isVisible)
+{
+    <div class="confirm-overlay">
+        <div class="confirm-card" @onclick:stopPropagation>
+            
+            <div class="icon-wrapper @(isDanger ? "icon-danger" : "icon-info")">
+                <i class="bi @(isDanger ? "bi-exclamation-triangle-fill" : "bi-info-circle-fill")"></i>
+            </div>
+
+            <h3 class="confirm-title">@title</h3>
+            <p class="confirm-msg">@message</p>
+
+            <div class="btn-group">
+                <button class="btn btn-cancel" @onclick="() => Respond(false)">
+                    @textCancel
+                </button>
+                
+                <button class="btn @(isDanger ? "btn-danger-action" : "btn-primary-action")" 
+                        @onclick="() => Respond(true)">
+                    @textConfirm
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private bool isVisible = false;
+    private string title = "";
+    private string message = "";
+    private string textConfirm = "";
+    private string textCancel = "";
+    private bool isDanger = false;
+
+    protected override void OnInitialized()
+    {
+        Service.OnShow += Show;
+    }
+
+    private void Show(string t, string m, string btnOk, string btnNo, bool danger)
+    {
+        title = t;
+        message = m;
+        textConfirm = btnOk;
+        textCancel = btnNo;
+        isDanger = danger;
+        isVisible = true;
+        StateHasChanged();
+    }
+
+    private void Respond(bool result)
+    {
+        isVisible = false;
+        Service.Respond(result); // Libera el 'await' en el código que lo llamó
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        Service.OnShow -= Show;
+    }
+}

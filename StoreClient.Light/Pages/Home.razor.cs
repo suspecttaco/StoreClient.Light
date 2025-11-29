@@ -15,6 +15,7 @@ public partial class Home : IDisposable
     [Inject] public SocketService Socket { get; set; }
     [Inject] public NotificationService NotifService { get; set; }
     [Inject] public ToastService Toast { get; set; }
+    [Inject] public ConfirmService Confirm { get; set; }
 
     // Estado de la Navegación Principal
     private Type activeComponent = typeof(DashboardView);
@@ -117,8 +118,8 @@ public partial class Home : IDisposable
         if (componentType == typeof(DashboardView)) currentTitle = "Dashboard General";
         else if (componentType == typeof(PosView)) currentTitle = "Punto de Venta";
         else if (componentType == typeof(SalesHistoryView)) currentTitle = "Historial de Transacciones";
-        else if (componentType == typeof(InventoryView)) currentTitle = "Gestión de Inventario";
-        else if (componentType == typeof(CategoryView)) currentTitle = "Catálogo de Categorías";
+        else if (componentType == typeof(InventoryView)) currentTitle = "Gestion de Inventario";
+        else if (componentType == typeof(CategoryView)) currentTitle = "Catalogo de Categorias";
         else if (componentType == typeof(CustomerView)) currentTitle = "Directorio de Clientes";
         else if (componentType == typeof(SupplierView)) currentTitle = "Directorio de Proveedores";
 
@@ -141,10 +142,19 @@ public partial class Home : IDisposable
     private string GetArrowIcon(bool isExpanded) =>
         isExpanded ? "bi-chevron-down" : "bi-chevron-right";
 
-    private void Logout()
+    private async void Logout()
     {
-        SessionManager.Instance.Logout();
-        Nav.NavigateTo("/login");
+        bool flag = await Confirm.Show(
+            "¿Cerrar Sesion?",
+            "Regresaras a la pagina de inicio de sesion.",
+            "Salir",
+            isDanger: false);
+
+        if (flag)
+        {
+            SessionManager.Instance.Logout();
+            Nav.NavigateTo("/login");
+        }
     }
     
     public void Dispose()

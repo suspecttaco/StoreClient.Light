@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using Microsoft.AspNetCore.Components;
 using StoreClient.Light.Models;
 using StoreClient.Light.Services;
@@ -8,6 +9,7 @@ public partial class InventoryView
 {
     [Inject] public ApiService Api { get; set; }
     [Inject] public ToastService Toast { get; set; }
+    [Inject] public ConfirmService Confirm { get; set; }
 
     private List<Product> allProducts = new();
     private List<Product> filteredProducts = new();
@@ -83,16 +85,24 @@ public partial class InventoryView
 
     private async Task HandleDelete(Product p)
     {
-        // Opcional: Agregar confirmación JS o Modal
-        bool success = await Api.DeleteAsync($"products/{p.Id}");
-        if (success)
+        bool flag = await Confirm.Show(
+            "¿Eliminar Producto?",
+            $"Se marcara '{p.Name}' como inactivo y no aparecera en ventas.",
+            "Si, Eliminar",
+            isDanger: true);
+
+        if (flag)
         {
-            await LoadData();
-            Toast.ShowSuccess($"Producto '{p.Name}' eliminado (Inactivo).");
-        }
-        else
-        {
-            Toast.ShowError("No se puede eliminar el producto.");
+            bool success = await Api.DeleteAsync($"products/{p.Id}");
+            if (success)
+            {
+                await LoadData();
+                Toast.ShowSuccess($"Producto '{p.Name}' eliminado (Inactivo).");
+            }
+            else
+            {
+                Toast.ShowError("No se puede eliminar el producto.");
+            }
         }
     }
 

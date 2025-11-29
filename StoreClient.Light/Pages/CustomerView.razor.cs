@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using Microsoft.AspNetCore.Components;
 using StoreClient.Light.Models;
 using StoreClient.Light.Services;
@@ -8,6 +9,7 @@ public partial class CustomerView
 {
     [Inject] public ApiService Api { get; set; }
     [Inject] public ToastService Toast { get; set; }
+    [Inject] public ConfirmService Confirm { get; set; }
 
     // Datos
     private List<Customer> allCustomers = new();
@@ -93,15 +95,24 @@ public partial class CustomerView
 
     private async Task HandleDelete(Customer customer)
     {
-        bool success = await Api.DeleteAsync($"catalogs/customers/{customer.Id}");
-        if (success)
+        bool flag = await Confirm.Show(
+            "¿Eliminar Cliente?",
+            "No podra registrar ventas a este cliente en el futuro.",
+            "Si, Eliminar",
+            isDanger: true);
+        
+        if (flag)
         {
-            await LoadData();
-            Toast.ShowSuccess($"Cliente '{customer.Name}' eliminado.");
-        }
-        else
-        {
-            Toast.ShowError("No se pudo eliminar al cliente.");
+            bool success = await Api.DeleteAsync($"catalogs/customers/{customer.Id}");
+            if (success)
+            {
+                await LoadData();
+                Toast.ShowSuccess($"Cliente '{customer.Name}' eliminado.");
+            }
+            else
+            {
+                Toast.ShowError("No se pudo eliminar al cliente.");
+            }
         }
     }
 

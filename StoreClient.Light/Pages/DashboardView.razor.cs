@@ -1,12 +1,14 @@
 using Microsoft.AspNetCore.Components;
 using StoreClient.Light.Models;
 using StoreClient.Light.Services;
+using Microsoft.JSInterop;
 
 namespace StoreClient.Light.Pages;
 
 public partial class DashboardView
 {
     [Inject] public ApiService Api { get; set; }
+    [Inject] public IJSRuntime JS { get; set; }
 
     private DashboardStats stats;
     private bool isLoading = true;
@@ -41,6 +43,17 @@ public partial class DashboardView
         {
             isLoading = false;
             StateHasChanged();
+        }
+    }
+    
+    // Este método se ejecuta DESPUÉS de que el HTML ya se pintó
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        // Solo intentamos dibujar si tenemos datos y NO estamos cargando
+        if (stats != null && stats.TrendLabels != null && stats.TrendValues != null)
+        {
+            // Llamamos a la función window.renderSalesChart que pusimos en index.html
+            await JS.InvokeVoidAsync("renderSalesChart", stats.TrendLabels, stats.TrendValues);
         }
     }
 }

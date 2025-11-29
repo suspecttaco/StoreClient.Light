@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using Microsoft.AspNetCore.Components;
 using StoreClient.Light.Models;
 using StoreClient.Light.Services;
@@ -8,6 +9,7 @@ public partial class SupplierView
 {
     [Inject] public ApiService Api { get; set; }
     [Inject] public ToastService Toast { get; set; }
+    [Inject] public ConfirmService Confirm { get; set; }
 
     private List<Supplier> allSuppliers = new();
     private List<Supplier> filteredSuppliers = new();
@@ -67,16 +69,25 @@ public partial class SupplierView
 
     private async Task HandleDelete(Supplier s)
     {
-        bool success = await Api.DeleteAsync($"catalogs/suppliers/{s.Id}");
+        bool flag = await Confirm.Show(
+            "¿Eliminar Proveedor?",
+            "Se desactivara el proveedor y no podra ser utilizado para otros movimientos.",
+            "Eliminar",
+            isDanger: true);
+
+        if (flag)
+        {
+            bool success = await Api.DeleteAsync($"catalogs/suppliers/{s.Id}");
         
-        if (success) 
-        {
-            await LoadData();
-            Toast.ShowSuccess($"Proveedor '{s.Name}' eliminado.");
-        }
-        else 
-        {
-            Toast.ShowError("Error al eliminar proveedor.");
+            if (success) 
+            {
+                await LoadData();
+                Toast.ShowSuccess($"Proveedor '{s.Name}' eliminado.");
+            }
+            else 
+            {
+                Toast.ShowError("Error al eliminar proveedor.");
+            }
         }
     }
 

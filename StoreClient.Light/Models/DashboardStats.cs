@@ -20,4 +20,12 @@ public class DashboardStats
     [JsonProperty("total_products")]
     [JsonPropertyName("total_products")]
     public int TotalProducts { get; set; }
+    
+    [JsonProperty("trend_labels")]
+    [JsonPropertyName("trend_labels")]
+    public List<string> TrendLabels { get; set; } = new();
+
+    [JsonProperty("trend_values")]
+    [JsonPropertyName("trend_values")]
+    public List<decimal> TrendValues { get; set; } = new();
 }
