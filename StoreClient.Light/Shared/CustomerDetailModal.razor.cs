@@ -29,18 +29,18 @@ public partial class CustomerDetailModal
             if (CustomerId.HasValue && CustomerId > 0)
             {
                 title = "Editar Cliente";
-                await CargarDatos(CustomerId.Value);
+                await LoadData(CustomerId.Value);
             }
             else
             {
                 title = "Nuevo Cliente";
-                // Por defecto, uno nuevo nace activo
+                // Por defecto
                 model = new CustomerModel { Active = true };
             }
         }
     }
 
-    private async Task CargarDatos(int id)
+    private async Task LoadData(int id)
     {
         isLoading = true;
         try
@@ -54,7 +54,7 @@ public partial class CustomerDetailModal
                     Phone = customer.Phone,
                     Address = customer.Address,
                     CreditLimit = customer.CreditLimit,
-                    Active = customer.Active // <--- CARGAMOS EL ESTADO REAL
+                    Active = customer.Active 
                 };
             }
         }
@@ -81,7 +81,7 @@ public partial class CustomerDetailModal
                 Phone = model.Phone,
                 Address = model.Address,
                 CreditLimit = model.CreditLimit,
-                Active = model.Active // <--- GUARDAMOS LO QUE ELIJA EL USUARIO
+                Active = model.Active
             };
 
             bool success;

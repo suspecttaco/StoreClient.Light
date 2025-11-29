@@ -38,7 +38,7 @@
         isVisible = true;
         StateHasChanged(); // Actualizar UI
 
-        // Reiniciar temporizador (3 segundos)
+        // Reiniciar temporizador
         timer?.Dispose();
         timer = new System.Threading.Timer(_ => 
         {
@@ -73,7 +73,6 @@
 
     public void Dispose()
     {
-        // Desuscribirse para evitar fugas de memoria
         ToastService.OnShow -= ShowToast;
         timer?.Dispose();
     }

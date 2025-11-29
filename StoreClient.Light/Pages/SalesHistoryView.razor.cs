@@ -38,13 +38,12 @@ public partial class SalesHistoryView
     private async Task LoadSales()
     {
         isLoading = true;
-        selectedSale = null; // Limpiar selección al recargar
+        selectedSale = null;
         try
         {
             string start = startDate.ToString("yyyy-MM-dd");
             string end = endDate.ToString("yyyy-MM-dd");
-            
-            // Llamada al endpoint con filtros
+
             salesList = await Api.GetListAsync<Sale>($"sales/?start={start}&end={end}");
         }
         catch (Exception ex)
@@ -60,10 +59,8 @@ public partial class SalesHistoryView
 
     private async Task SelectSale(Sale sale)
     {
-        // Cargar detalles completos (productos) de la venta seleccionada
         try
         {
-            // Pedimos al backend la venta completa por ID
             var fullSale = await Api.GetByIdAsync<Sale>($"sales/{sale.Id}");
             if (fullSale != null)
             {
@@ -76,13 +73,11 @@ public partial class SalesHistoryView
         }
     }
 
-    // --- ACCIONES ---
-
+    // Acciones
     private void SeeTicket()
     {
         if (selectedSale == null) return;
-
-        // Generar texto usando tu utilidad existente
+        
         ticketContent = TicketGenerator.GenerateTicketString(selectedSale);
         ticketTitle = $"Ticket de Venta #{selectedSale.Id}";
         showTicketModal = true;
@@ -104,12 +99,11 @@ public partial class SalesHistoryView
         
             if (success)
             {
-                int id = selectedSale.Id; // Guardar ID para el mensaje
-                selectedSale = null;      // Limpiar selección
+                int id = selectedSale.Id;
+                selectedSale = null;      
             
                 await LoadSales();
-            
-                // USAR EL SERVICIO GLOBAL
+                
                 Toast.ShowSuccess($"Venta #{id} cancelada y stock restaurado.");
             }
             else
@@ -118,14 +112,12 @@ public partial class SalesHistoryView
             }
         }
     }
-    
-    // Cerrar modal de ticket
+
     private void OnTicketClosed()
     {
         showTicketModal = false;
     }
-    
-    // Este método recibe la orden del modal
+
     private async Task HandleExport((string Format, string Name) args)
     {
         if (salesList.Count == 0) 

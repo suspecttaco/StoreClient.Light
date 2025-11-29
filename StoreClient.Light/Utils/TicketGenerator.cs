@@ -11,7 +11,7 @@ public class TicketGenerator
                 
                 // Encabezado
                 sb.AppendLine("================================");
-                sb.AppendLine("       TIENDITA ULTIMATE        ");
+                sb.AppendLine("            Shopper             ");
                 sb.AppendLine("================================");
                 sb.AppendLine($"Folio: {venta.Id}");
                 sb.AppendLine($"Fecha: {venta.Date:dd/MM/yyyy HH:mm}");
@@ -25,14 +25,13 @@ public class TicketGenerator
     
                 foreach (var item in venta.Details)
                 {
-                    // Cortar nombre si es muy largo
                     string nombre = item.ProductName.Length > 18 
                         ? item.ProductName.Substring(0, 18) 
                         : item.ProductName;
     
                     sb.AppendLine(String.Format("{0,-18} {1,5} {2,7:0.00}", 
                         nombre, 
-                        item.Amount, // Muestra decimales si hay (kg)
+                        item.Amount,
                         item.Subtotal));
                 }
     

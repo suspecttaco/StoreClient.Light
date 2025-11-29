@@ -7,7 +7,7 @@
             <h4 class="fw-bold m-0 text-dark">Resumen Operativo</h4>
             <small class="text-muted">Estadísticas de hoy</small>
         </div>
-        <button class="btn btn-light btn-sm shadow-sm border" @onclick="CargarDatos">
+        <button class="btn btn-light btn-sm shadow-sm border" @onclick="LoadData">
             <i class="bi bi-arrow-clockwise me-1"></i> Actualizar
         </button>
     </div>
@@ -27,7 +27,7 @@
             <div>
                 <strong>Error de carga:</strong> @errorMessage
                 <br/>
-                <button class="btn btn-link p-0 text-danger" @onclick="CargarDatos">Reintentar</button>
+                <button class="btn btn-link p-0 text-danger" @onclick="LoadData">Reintentar</button>
             </div>
         </div>
     }

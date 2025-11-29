@@ -34,7 +34,7 @@ public partial class CustomerView
         isLoading = true;
         try
         {
-            // Pedimos todos los clientes (incluyendo inactivos si el check está marcado)
+            // Pedir datos a api
             string query = showInactive ? "?all=true" : "";
             allCustomers = await Api.GetListAsync<Customer>($"catalogs/customers{query}");
             
@@ -51,7 +51,7 @@ public partial class CustomerView
         }
     }
 
-    // --- BÚSQUEDA Y FILTROS ---
+    // Busqueda y filtros
     private void HandleSearch(ChangeEventArgs e)
     {
         searchQuery = e.Value?.ToString() ?? "";
@@ -80,7 +80,7 @@ public partial class CustomerView
         }
     }
 
-    // --- ACCIONES CRUD ---
+    // CRUD
     private void OpenCreateModal()
     {
         selectedCustomerId = null; // Modo Crear

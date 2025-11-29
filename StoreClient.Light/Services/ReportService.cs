@@ -9,14 +9,13 @@ namespace StoreClient.Light.Services;
 
 public class ReportService
 {
-    // Ruta base: Mis Documentos / Tiendita_Reportes
+    // Ruta base: Mis Documentos / POS_Reports
     private string BasePath => Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), 
-        "Tiendita_Reportes");
+        "POS_Reports");
 
     public ReportService()
     {
-        // Asegurar que la carpeta exista al iniciar
         if (!Directory.Exists(BasePath)) Directory.CreateDirectory(BasePath);
     }
 

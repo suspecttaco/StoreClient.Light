@@ -11,10 +11,8 @@ public enum ToastLevel
 
 public class ToastService
 {
-    // Evento que el componente visual escuchará
     public event Action<string, ToastLevel>? OnShow;
-
-    // Métodos rápidos para usar en tus vistas
+    
     public void ShowSuccess(string message) => Show(message, ToastLevel.Success);
     public void ShowError(string message)   => Show(message, ToastLevel.Error);
     public void ShowInfo(string message)    => Show(message, ToastLevel.Info);

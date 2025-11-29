@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Text.Json.Serialization; // Importante para .NET 9 / Blazor
+using System.Text.Json.Serialization;
 
 namespace StoreClient.Light.Models;
 
@@ -17,15 +17,13 @@ public class StockAlertItem
     [JsonPropertyName("product_id")]
     public int ProductId { get; set; }
 
-    // El backend manda 'product_name' o 'name' dependiendo de tu versión. 
-    // Pondremos los dos para asegurar.
     [JsonProperty("product_name")]
     [JsonPropertyName("product_name")]
     public string ProductName { get; set; }
     
     [JsonProperty("name")] 
     [JsonPropertyName("name")]
-    public string Name { get; set; } // Fallback
+    public string Name { get; set; }
 
     [JsonProperty("current_stock")]
     [JsonPropertyName("current_stock")]
@@ -35,6 +33,5 @@ public class StockAlertItem
     [JsonPropertyName("min_stock")]
     public decimal MinStock { get; set; }
     
-    // Propiedad auxiliar para obtener el nombre correcto
     public string DisplayName => !string.IsNullOrEmpty(ProductName) ? ProductName : Name;
 }

@@ -22,12 +22,11 @@ public class SocketService
     {
         string url = AppConfig.BaseUrl.Replace("/api/", "");
 
-        // CONFIGURACIÓN ROBUSTA
         var options = new SocketIOOptions
         {
-            EIO = EngineIO.V4, // Forzar Engine.IO v4 (Vital para Flask moderno)
-            Transport = TransportProtocol.WebSocket, // Forzar WebSocket (evita Polling)
-            Reconnection = true, // Reintentar si se cae
+            EIO = EngineIO.V4, // Forzar Engine.IO v4
+            Transport = TransportProtocol.WebSocket, // Forzar WebSocket
+            Reconnection = true,
             ReconnectionDelay = 1000,
             ReconnectionAttempts = 5
         };
@@ -42,11 +41,10 @@ public class SocketService
         // Conexion
         _client.OnConnected += async (sender, e) =>
         {
-            // WIP
             await _client.EmitAsync("join_inventory", new { user = "csharp_client" });
         };
         
-        // Actualizacion de inventario (Ventas)
+        // Actualizacion de inventario
         _client.On("inventory_updated", response =>
         {
             OnInventoryUpdated?.Invoke(response.GetValue<object>());
@@ -57,20 +55,16 @@ public class SocketService
         {
             try 
             {
-                // Deserialización automática al modelo
                 var data = response.GetValue<AlertPayload>();
                 
                 if (data != null && data.Products != null && data.Products.Count > 0)
                 {
-                    System.Diagnostics.Debug.WriteLine($"⚠️ Alerta recibida: {data.Products.Count} productos");
-                    
-                    // Disparamos el evento con los datos limpios
                     OnLowStockAlert?.Invoke(data);
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                System.Diagnostics.Debug.WriteLine($"🔥 Error leyendo alerta: {ex.Message}");
+                // ignored
             }
         });
         

@@ -38,8 +38,6 @@
 @code {
     [Parameter] public bool IsVisible { get; set; }
     [Parameter] public EventCallback<bool> IsVisibleChanged { get; set; }
-    
-    // Evento que devuelve (Formato, NombreArchivo)
     [Parameter] public EventCallback<(string Format, string Name)> OnExport { get; set; }
 
     private string fileName = $"Reporte_{DateTime.Now:yyyy-MM-dd}";
@@ -52,8 +50,6 @@
 
         isLoading = true;
         format = selectedFormat;
-        
-        // Avisamos al padre que exporte
         await OnExport.InvokeAsync((selectedFormat, fileName));
         
         isLoading = false;

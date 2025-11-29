@@ -29,7 +29,7 @@ public partial class SupplierDetailModal
             if (SupplierId.HasValue && SupplierId > 0)
             {
                 title = "Editar Proveedor";
-                await CargarDatos(SupplierId.Value);
+                await LoadData(SupplierId.Value);
             }
             else
             {
@@ -39,7 +39,7 @@ public partial class SupplierDetailModal
         }
     }
 
-    private async Task CargarDatos(int id)
+    private async Task LoadData(int id)
     {
         isLoading = true;
         try

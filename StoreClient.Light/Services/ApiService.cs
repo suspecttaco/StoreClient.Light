@@ -16,7 +16,6 @@ public class ApiService
         
         var options = new RestClientOptions(_baseUrl)
         {
-            // Ignora errores de SSL en desarrollo
             RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
         };
         _client = new RestClient(_baseUrl);

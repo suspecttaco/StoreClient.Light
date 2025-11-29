@@ -3,9 +3,6 @@ using StoreClient.Light.Models;
 using StoreClient.Light.Utils;
 using StoreClient.Light.Services;
 
-// Asegúrate de importar donde tengas tus vistas (DashboardView, etc)
-// Si están en el mismo namespace (Pages), no es necesario el using extra.
-
 namespace StoreClient.Light.Pages;
 
 public partial class Home : IDisposable
@@ -21,21 +18,20 @@ public partial class Home : IDisposable
     private Type activeComponent = typeof(DashboardView);
     private string currentTitle = "Dashboard General";
 
-    // Estado de los Menús Colapsables (Acordeones)
+    // Estado de los Menús Colapsables
     private bool expandOperations = false;
     private bool expandAdmin = false;
     
     private string userName = "Cargando...";
     private string userRole = "Usuario";
     private string userInitial = "U";
-
-    // Al iniciar, verificamos seguridad
+    
     protected override async Task OnInitializedAsync()
     {
         if (!SessionManager.Instance.IsLoggedIn)
         {
             Nav.NavigateTo("/login");
-            return; // IMPORTANTE: Detener ejecución si no hay login
+            return; 
         }
         
         var u = SessionManager.Instance.User;
@@ -46,14 +42,12 @@ public partial class Home : IDisposable
             if (!string.IsNullOrEmpty(userName)) 
                 userInitial = userName.Substring(0, 1).ToUpper();
         }
-        
-        // 1. Limpieza preventiva (Aunque es difícil que funcione entre instancias, es buena práctica)
+        // Socket
         Socket.OnLowStockAlert -= HandleLowStock;
         Socket.OnStockResolved -= HandleStockResolved;
         
         await Socket.ConnectAsync();
-
-        // 2. Suscripción
+        
         Socket.OnLowStockAlert += HandleLowStock;
         Socket.OnStockResolved += HandleStockResolved;
     }
@@ -71,7 +65,7 @@ public partial class Home : IDisposable
 
         InvokeAsync(() => 
         {
-            // Notificación Verde (Success)
+            // Notificación
             NotifService.AddNotification(titulo, mensaje, "success");
             Toast.ShowSuccess(mensaje);
             StateHasChanged();
@@ -80,7 +74,7 @@ public partial class Home : IDisposable
     
     private void HandleLowStock(AlertPayload data)
     {
-        // 1. Construir el mensaje
+        // Construir el mensaje
         int count = data.Products.Count;
         string titulo = "Stock Crítico";
         string mensaje = "";
@@ -95,16 +89,13 @@ public partial class Home : IDisposable
             mensaje = $"{count} productos requieren reabastecimiento urgente.";
         }
 
-        // 2. Actualizar UI en el hilo principal
         InvokeAsync(() => 
         {
-            // A) Agregar al historial de la campana
+
             NotifService.AddNotification(titulo, mensaje, "warning");
-        
-            // B) Mostrar el Toast flotante
+            
             Toast.ShowWarning(mensaje);
-        
-            // C) Refrescar para que aparezca el puntito rojo
+            
             StateHasChanged();
         });
     }
@@ -126,13 +117,11 @@ public partial class Home : IDisposable
         StateHasChanged();
     }
 
-    // Estilo visual para saber en qué pantalla estamos
     private string GetActiveClass(Type type)
     {
         return activeComponent == type ? "active" : "";
     }
 
-    // Lógica de los menús desplegables
     private void ToggleMenu(string menu)
     {
         if (menu == "ops") expandOperations = !expandOperations;
@@ -159,7 +148,6 @@ public partial class Home : IDisposable
     
     public void Dispose()
     {
-        // Cuando este componente se destruya (ej. al cerrar sesión), dejamos de escuchar
         if (Socket != null)
         {
             Socket.OnLowStockAlert -= HandleLowStock;

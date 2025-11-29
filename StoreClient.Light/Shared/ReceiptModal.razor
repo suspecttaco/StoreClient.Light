@@ -43,7 +43,6 @@
     [Parameter] public string Title { get; set; } = "Ticket";
     [Parameter] public string Content { get; set; } = "";
     
-    // Evento para avisarle al padre que se cerró (y limpiar el carrito)
     [Parameter] public EventCallback OnClose { get; set; }
 
     private async Task Close()
@@ -54,7 +53,6 @@
 
     private void Print()
     {
-        // Aquí podrías llamar a un servicio de impresión real
-        // Por ahora solo simula
+        // WIP -> implementar impresion real
     }
 }

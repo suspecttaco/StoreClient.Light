@@ -39,7 +39,6 @@
 </div>
 
 @code {
-    // Parámetros obligatorios para que funcione el @bind
     [Parameter] public List<Customer> Customers { get; set; } = new();
     [Parameter] public int SelectedId { get; set; }
     [Parameter] public EventCallback<int> SelectedIdChanged { get; set; }
@@ -52,7 +51,7 @@
     private async Task SelectItem(Customer customer)
     {
         SelectedId = customer.Id;
-        // Avisamos al padre (POSView) que el valor cambió
+        // Avisar que el valor cambió
         await SelectedIdChanged.InvokeAsync(SelectedId);
         isOpen = false;
     }

@@ -15,7 +15,7 @@ public class Sale
 
     [JsonProperty("customer_id")]
     [JsonPropertyName("customer_id")]
-    public int? CustomerId { get; set; } // Puede ser nulo si es venta al público general
+    public int? CustomerId { get; set; } 
 
     [JsonProperty("total")]
     [JsonPropertyName("total")]

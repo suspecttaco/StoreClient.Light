@@ -62,15 +62,13 @@
 
     protected override void OnInitialized()
     {
-        // Suscribirse para actualizar el globito rojo en tiempo real
         NotifService.OnChange += StateHasChanged;
     }
 
     private void ToggleOpen()
     {
         isOpen = !isOpen;
-        // Opcional: Marcar como leídas automáticamente al abrir
-        // if (isOpen) NotifService.MarkAllAsRead();
+        if (isOpen) NotifService.MarkAllAsRead();
     }
 
     private void Close() => isOpen = false;

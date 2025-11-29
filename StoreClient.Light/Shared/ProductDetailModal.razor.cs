@@ -39,7 +39,6 @@ public partial class ProductDetailModal
             else
             {
                 title = "Nuevo Producto";
-                // Valores por defecto
                 model = new ProductModel { Active = true, Stock = 0, MinStock = 5 };
             }
         }
@@ -47,14 +46,13 @@ public partial class ProductDetailModal
 
     private async Task CargarCategorias()
     {
-        // Cargamos las categorías para el select
         var cats = await Api.GetListAsync<Category>("catalogs/categories");
         
         categoryOptions = cats.Select(c => new SelectorOption 
         {
             Id = c.Id,
             Text = c.Name,
-            Subtitle = c.Description // Opcional: Mostrar descripción abajo
+            Subtitle = c.Description
         }).ToList();
     }
 

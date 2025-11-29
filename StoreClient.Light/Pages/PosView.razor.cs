@@ -14,33 +14,30 @@ public partial class PosView
     [Inject] public NavigationManager Nav { get; set; }
     [Inject] public ToastService Toast { get; set; }
 
-    // --- DATOS ---
+    // Datos
     private List<Product> allProducts = new();
     private List<Product> filteredProducts = new();
     private List<Customer> customers = new();
     private List<SaleDetail> cart = new();
 
-    // --- ESTADO DE UI ---
+    // UI
     private string searchQuery = "";
-    private int selectedCustomerId = 0; // 0 representa "Público General"
+    private int selectedCustomerId = 0;
     private bool isLoading = true;
     private bool isPaying = false;
 
-    // --- ESTADO DEL MODAL DE TICKET ---
+    // Ticket
     private bool showReceipt = false;
     private bool isErrorModal = false;
     private string modalTitle = "";
     private string modalMessage = "";
 
-    // --- PROPIEDADES CALCULADAS ---
+    // Calculos
     private decimal TotalToPay => cart.Sum(x => x.Subtotal);
     
     // Variables de estado
     private bool showCustomerModal = false;
-
-    // =================================================
-    // 1. CARGA INICIAL
-    // =================================================
+    
     protected override async Task OnInitializedAsync()
     {
         await LoadData();
@@ -51,7 +48,6 @@ public partial class PosView
         isLoading = true;
         try
         {
-            // Carga paralela para mayor velocidad
             var t1 = Api.GetListAsync<Product>("products/");
             var t2 = Api.GetListAsync<Customer>("catalogs/customers");
 
@@ -59,11 +55,9 @@ public partial class PosView
 
             allProducts = await t1;
             customers = await t2;
-
-            // Insertar opción por defecto
+            
             customers.Insert(0, new Customer { Id = 0, Name = "Público General" });
 
-            // Inicializar filtro
             filteredProducts = allProducts;
         }
         catch (Exception ex)
@@ -77,9 +71,7 @@ public partial class PosView
         }
     }
 
-    // =================================================
-    // 2. BÚSQUEDA Y FILTRADO
-    // =================================================
+    // Busqueda
     private void HandleSearch(ChangeEventArgs e)
     {
         searchQuery = e.Value?.ToString() ?? "";
@@ -101,22 +93,18 @@ public partial class PosView
         }
     }
 
-    // =================================================
-    // 3. GESTIÓN DEL CARRITO
-    // =================================================
+    // Carrito
     private void AddToCart(Product product)
     {
         var existingItem = cart.FirstOrDefault(x => x.ProductId == product.Id);
 
         if (existingItem != null)
         {
-            // Si ya existe, sumamos 1
             existingItem.Amount++;
             existingItem.Subtotal = existingItem.Amount * existingItem.UnitPrice;
         }
         else
         {
-            // Si no, nuevo renglón
             cart.Add(new SaleDetail
             {
                 ProductId = product.Id,
@@ -126,15 +114,13 @@ public partial class PosView
                 Subtotal = product.SellPrice
             });
         }
-
-        // Limpiar búsqueda para agilizar el siguiente escaneo
+        
         searchQuery = "";
         FilterProducts();
     }
 
     private void UpdateQuantity(SaleDetail item, ChangeEventArgs e)
     {
-        // Validar que sea número positivo
         if (decimal.TryParse(e.Value?.ToString(), out decimal qty) && qty > 0)
         {
             item.Amount = qty;
@@ -142,9 +128,7 @@ public partial class PosView
         }
         else
         {
-            // Si pone 0 o texto inválido, revertir visualmente o borrar?
-            // Por ahora forzamos 1 si es inválido para no romper
-            // item.Amount = 1; 
+            item.Amount = 1; 
         }
     }
 
@@ -157,10 +141,8 @@ public partial class PosView
     {
         showCustomerModal = true;
     }
-
-    // =================================================
-    // 4. COBRO Y GENERACIÓN DE TICKET
-    // =================================================
+    
+    // Cobro
     private async Task HandleCheckout()
     {
         if (cart.Count == 0) return;
@@ -170,7 +152,6 @@ public partial class PosView
 
         try
         {
-            // Preparar el objeto de venta
             int? customerToSend = (selectedCustomerId > 0) ? selectedCustomerId : null;
 
             var sale = new Sale
@@ -182,27 +163,24 @@ public partial class PosView
                 Details = cart
             };
 
-            // 1. ENVIAR AL BACKEND (POST)
             var response = await Api.PostWithResponseAsync<SaleResponse, Sale>("sales/", sale);
 
             if (response != null && response.SaleId > 0)
             {
-                // 2. ÉXITO: Obtener datos completos para el ticket (con fechas y folios reales)
+
                 var fullSale = await Api.GetByIdAsync<Sale>($"sales/{response.SaleId}");
 
                 if (fullSale != null)
                 {
                     Toast.ShowSuccess("¡Venta registrada correctamente!");
-                    // Generar texto del ticket
+
                     modalTitle = "Ticket de Venta";
                     modalMessage = TicketGenerator.GenerateTicketString(fullSale);
                     isErrorModal = false;
-                    
-                    // MOSTRAR EL MODAL
+
                     showReceipt = true;
                 }
                 
-                // Recargar productos en segundo plano (para actualizar stock visualmente)
                 allProducts = await Api.GetListAsync<Product>("products/");
                 FilterProducts();
             }
@@ -229,38 +207,31 @@ public partial class PosView
             StateHasChanged();
         }
     }
-
-    // =================================================
-    // 5. CIERRE DEL MODAL (Limpieza)
-    // =================================================
+    
+    // Limpieza
     private void OnModalClosed()
     {
-        // Solo limpiamos el carrito si fue una venta exitosa
         if (!isErrorModal)
         {
             cart.Clear();
             searchQuery = "";
-            selectedCustomerId = 0; // Resetear cliente a Público General
+            selectedCustomerId = 0;
             FilterProducts();
             StateHasChanged();
         }
-        
-        // Cerrar modal
+
         showReceipt = false;
     }
-    
-    // Callback cuando se guarda exitosamente
+
     private async Task OnCustomerSaved()
     {
-        // Recargar la lista de clientes para que aparezca el nuevo
+
         var list = await Api.GetListAsync<Customer>("catalogs/customers");
 
-        // Mantener el "Público General" al inicio
         list.Insert(0, new Customer { Id = 0, Name = "Público General" });
 
         customers = list;
 
-        // Opcional: Seleccionar el último creado (lógica simple: el de mayor ID)
         var nuevo = customers.MaxBy(c => c.Id);
         if (nuevo != null) selectedCustomerId = nuevo.Id;
 

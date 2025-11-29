@@ -4,10 +4,10 @@ namespace StoreClient.Light.Services;
 
 public class NotificationService
 {
-    // Lista en memoria (Historial)
+    // Lista en memoria
     public List<AppNotification> Notifications { get; private set; } = new();
     
-    // Evento para actualizar la UI (La campana)
+    // Evento para actualizar la UI
     public event Action? OnChange;
 
     public void AddNotification(string title, string message, string type = "info")
@@ -20,10 +20,8 @@ public class NotificationService
             Timestamp = DateTime.Now
         };
 
-        // Agregamos al inicio de la lista (LIFO)
         Notifications.Insert(0, note);
-        
-        // Limitamos el historial a las últimas 50 para no saturar memoria
+
         if (Notifications.Count > 50) Notifications.RemoveAt(Notifications.Count - 1);
 
         NotifyStateChanged();

@@ -9,11 +9,11 @@ public class SaleDetail
     [JsonPropertyName("product_id")]
     public int ProductId { get; set; }
 
-    [JsonProperty("product_name")] // Opcional: si el backend lo manda, sirve para reportes
+    [JsonProperty("product_name")] 
     [JsonPropertyName("product_name")]
     public string ProductName { get; set; }
 
-    [JsonProperty("amount")] // Cantidad (puede ser decimal por los kilos)
+    [JsonProperty("amount")]
     [JsonPropertyName("amount")]
     public decimal Amount { get; set; }
 

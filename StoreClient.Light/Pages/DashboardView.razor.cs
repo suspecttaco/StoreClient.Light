@@ -16,10 +16,10 @@ public partial class DashboardView
 
     protected override async Task OnInitializedAsync()
     {
-        await CargarDatos();
+        await LoadData();
     }
 
-    private async Task CargarDatos()
+    private async Task LoadData()
     {
         isLoading = true;
         errorMessage = null;
@@ -27,7 +27,6 @@ public partial class DashboardView
 
         try
         {
-            // Usamos el endpoint que ya probamos en el backend
             stats = await Api.GetByIdAsync<DashboardStats>("dashboard/stats");
 
             if (stats == null)
@@ -46,13 +45,10 @@ public partial class DashboardView
         }
     }
     
-    // Este método se ejecuta DESPUÉS de que el HTML ya se pintó
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        // Solo intentamos dibujar si tenemos datos y NO estamos cargando
         if (stats != null && stats.TrendLabels != null && stats.TrendValues != null)
         {
-            // Llamamos a la función window.renderSalesChart que pusimos en index.html
             await JS.InvokeVoidAsync("renderSalesChart", stats.TrendLabels, stats.TrendValues);
         }
     }
