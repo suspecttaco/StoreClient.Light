@@ -17,6 +17,7 @@ public class SocketService
     public event Action<object> OnInventoryUpdated;
     public event Action<AlertPayload> OnLowStockAlert;
     public event Action<ResolvedAlertPayload> OnStockResolved;
+    public bool IsConnected => _client != null && _client.Connected;
 
     public SocketService()
     {

@@ -22,6 +22,7 @@ class Program
         appBuilder.Services.AddSingleton<NotificationService>();
         appBuilder.Services.AddSingleton<ConfirmService>();
         appBuilder.Services.AddSingleton<ReportService>();
+        appBuilder.Services.AddSingleton<KeepAliveService>();
         
         // Registrar pagina maestra 
         appBuilder.RootComponents.Add<App>("#app");

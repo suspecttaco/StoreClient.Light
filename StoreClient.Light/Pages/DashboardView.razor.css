@@ -68,14 +68,18 @@
 
 /* Círculo del icono PERFECTO */
 .kpi-icon {
-    font-size: 1.5rem;
-    width: 48px;  /* Un poco más grande */
-    height: 48px; /* Cuadrado perfecto */
-    border-radius: 12px; /* Bordes suaves */
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
     display: flex;
-    align-items: center;
-    justify-content: center; /* Centrado absoluto */
+    align-items: center;     /* Centrado Vertical */
+    justify-content: center; /* Centrado Horizontal */
     margin-bottom: 1rem;
+    transition: transform 0.2s;
+}
+
+.kpi-card:hover .kpi-icon {
+    transform: scale(1.1) rotate(-5deg);
 }
 
 /* VARIANTES DE COLOR (Semánticas) */
