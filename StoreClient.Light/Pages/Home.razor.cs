@@ -30,7 +30,7 @@ public partial class Home : IDisposable
     {
         if (!SessionManager.Instance.IsLoggedIn)
         {
-            Nav.NavigateTo("/login");
+            Nav.NavigateTo("/");
             return; 
         }
         
@@ -142,7 +142,7 @@ public partial class Home : IDisposable
         if (flag)
         {
             SessionManager.Instance.Logout();
-            Nav.NavigateTo("/login");
+            Nav.NavigateTo("/");
         }
     }
     

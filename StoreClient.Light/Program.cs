@@ -32,7 +32,8 @@ class Program
         app.MainWindow
             .SetTitle("Sistema de Punto de Venta para Abarrotes pequeños")
             .SetSize(1024, 768)
-            .Center().SetMaximized(true);
+            .Center().SetMaximized(true)
+            .SetIconFile("appicon.ico");
         
         // Correr
         app.Run();

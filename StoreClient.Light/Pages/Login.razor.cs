@@ -30,7 +30,7 @@ public partial class Login
             {
                 SessionManager.Instance.Login(response.User, response.Token);
 
-                Nav.NavigateTo("/", forceLoad: true); 
+                Nav.NavigateTo("/app", forceLoad: true); 
             }
             else
             {
