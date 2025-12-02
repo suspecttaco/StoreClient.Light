@@ -1,8 +1,6 @@
-
 using SocketIO.Core;
 using SocketIOClient;
 using SocketIOClient.Transport;
-using SocketIOClient.Newtonsoft.Json;
 using StoreClient.Light.Models;
 using StoreClient.Light.Utils;
 

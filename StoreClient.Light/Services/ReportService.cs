@@ -2,7 +2,6 @@ using ClosedXML.Excel;
 using StoreClient.Light.Models;
 using System.Diagnostics;
 using QuestPDF.Fluent;
-using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 
 namespace StoreClient.Light.Services;
@@ -54,7 +53,7 @@ public class ReportService
             }
         });
 
-        AbrirArchivo(fullPath);
+        OpenFile(fullPath);
         return fullPath;
     }
 
@@ -103,11 +102,11 @@ public class ReportService
             doc.GeneratePdf(fullPath);
         });
 
-        AbrirArchivo(fullPath);
+        OpenFile(fullPath);
         return fullPath;
     }
 
-    private void AbrirArchivo(string path)
+    private void OpenFile(string path)
     {
         try { Process.Start(new ProcessStartInfo { FileName = path, UseShellExecute = true }); }
         catch { /* Ignorar */ }

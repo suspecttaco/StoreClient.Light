@@ -1,7 +1,3 @@
-using System.Threading;
-using System.Threading.Tasks;
-using StoreClient.Light.Utils;
-
 namespace StoreClient.Light.Services;
 
 public class KeepAliveService : IDisposable

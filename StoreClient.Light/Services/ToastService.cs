@@ -3,7 +3,7 @@ namespace StoreClient.Light.Services;
 // Tipos de mensaje
 public enum ToastLevel
 {
-    Success, // Verde (Éxito)
+    Success, // Verde (Exito)
     Error,   // Rojo (Fallo)
     Info,    // Azul (Info general)
     Warning  // Amarillo (Cuidado)

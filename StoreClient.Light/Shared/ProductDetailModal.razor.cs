@@ -29,12 +29,12 @@ public partial class ProductDetailModal
         {
             errorMessage = null;
             isLoading = false;
-            await CargarCategorias();
+            await LoadCategories();
 
             if (ProductId.HasValue && ProductId > 0)
             {
                 title = "Editar Producto";
-                await CargarProducto(ProductId.Value);
+                await LoadProduct(ProductId.Value);
             }
             else
             {
@@ -44,7 +44,7 @@ public partial class ProductDetailModal
         }
     }
 
-    private async Task CargarCategorias()
+    private async Task LoadCategories()
     {
         var cats = await Api.GetListAsync<Category>("catalogs/categories");
         
@@ -56,7 +56,7 @@ public partial class ProductDetailModal
         }).ToList();
     }
 
-    private async Task CargarProducto(int id)
+    private async Task LoadProduct(int id)
     {
         isLoading = true;
         try

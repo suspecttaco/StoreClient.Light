@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using RestSharp;
+using RestSharp.Serializers.NewtonsoftJson;
 using StoreClient.Light.Models;
 using StoreClient.Light.Utils;
 
@@ -18,7 +19,10 @@ public class ApiService
         {
             RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
         };
-        _client = new RestClient(_baseUrl);
+        _client = new RestClient(
+            options,
+            configureSerialization: s => s.UseNewtonsoftJson()
+            );
     }
     
     // Testear conexion

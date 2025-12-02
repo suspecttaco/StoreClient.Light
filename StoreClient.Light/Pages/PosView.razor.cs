@@ -137,7 +137,7 @@ public partial class PosView
         cart.Remove(item);
     }
 
-    private void CrearClienteRapido()
+    private void CreateFastClient()
     {
         showCustomerModal = true;
     }
