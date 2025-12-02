@@ -1,6 +1,8 @@
+using Newtonsoft.Json;
 using SocketIO.Core;
 using SocketIOClient;
 using SocketIOClient.Transport;
+using SocketIO.Serializer.NewtonsoftJson;
 using StoreClient.Light.Models;
 using StoreClient.Light.Utils;
 
@@ -31,6 +33,14 @@ public class SocketService
         };
         
         _client = new SocketIOClient.SocketIO(url, options);
+        
+        // Configurar el serializador de Newtonsoft
+        var settings = new JsonSerializerSettings
+        {
+            ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver()
+        };
+
+        _client.Serializer = new NewtonsoftJsonSerializer();
         
         SetEvents();
     }
